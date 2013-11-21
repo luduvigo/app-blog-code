@@ -1,24 +1,19 @@
-#!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 import webapp2
+import jinja2
 import cgi
 import re
 import HTMLParser
 import htmllib
+import os
+from string import letters
+
+template_dir = os.path.join(os.path.dirname(__file__), 'html')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
+                               autoescape = True)
+
+def render_str(template, **params):
+    t = jinja_env.get_template(template)
+    return t.render(params)
 
 def escape_html(s):
     return cgi.escape(s, quote = True)
@@ -27,73 +22,7 @@ def html_decode(s):
 	html_parser = HTMLParser.HTMLParser()
 	return html_parser.unescape(s)
 
-#form = """
-#<form method="post">
-#	What is your birthday?
-#	<br>
-#	<label> Day <input type="text" name="day" value="%(day)s"><label>
-#	<label>	Month <input type="text" name="month" value="%(month)s"> <label>
-#	<label> Year <input type="text" name="year" value="%(year)s"> <label>
-#	<div style="color: red">%(error)s</div>	
-#	<br>
-#	<br>
-#	<input type= "submit">
-#</form>
-#	"""
 
-#months = ['January',
-#          'February',
-#          'March',
-#          'April',
-#          'May',
-#          'June',
-#          'July',
-#          'August',
-#          'September',
-#          'October',
-#          'November',
-#          'December']
-#
-#def valid_month(month):
-#	if month:
-#		cap_month = month.capitalize()
-#		if cap_month in months:
-#			return cap_month
-#
-#def valid_day(day):
-#    if day and day.isdigit():
-#        num = int(day)
-#        if num in range(1,32):
-#            return num
-
-#def valid_year(year):
-#    if year and year.isdigit():
-#        year = int(year)
-#        if year >= 1900 and year <= 2020:
-#            return year
-
-#class MainPage(webapp2.RequestHandler):
-#	def write_form(self, error="", month="", day="", year=""):
-#		self.response.out.write(form % {"error": error, "month": month, "day": day, "year": year})		
-
-# 	def get(self):
-#		self.write_form()
-
-#	def post(self):
-#		user_month = self.request.get('month')
-#		user_day = self.request.get('day')
-#		user_year = self.request.get('year')
-#		month = valid_month(user_month)
-#		day = valid_day(user_day)
-#		year = valid_year(user_year)
-#		if not(month and day and year):
-#			self.write_form("That doesn't look valid to me, friend.", user_month, user_day, user_year)
-#		else:
-#			self.response.out.write("Thanks! That's a totally valid day!")
-
-
-#app = webapp2.WSGIApplication([('/', MainPage)],
-#                              debug=True)
 
 def rotate13(s):
 	result = ""
@@ -107,17 +36,17 @@ def rotate13(s):
 		result += a
 	return result
 
-form="""
-<form method="get"> 
-	What is your birthday?
-	<br>
-	<input type="text" name="day">
-	<input type="text" name="month">	
-	<input type="text" name="year">
-	<br>
-	<br>
-	<input type= "submit">
-</form>"""
+#form="""
+#<form method="get"> 
+#	What is your birthday?
+#	<br>
+#	<input type="text" name="day">
+#	<input type="text" name="month">	
+#	<input type="text" name="year">
+#	<br>
+#	<br>
+#	<input type= "submit">
+#</form>"""
 
 formRot13="""
 
@@ -145,6 +74,18 @@ def unescape(s):
     s = s.replace("&amp;", "&")
     return s
 
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+def valid_username(username):
+    return username and USER_RE.match(username)
+
+PASS_RE = re.compile(r"^.{3,20}$")
+def valid_password(password):
+	return password and PASS_RE.match(password)
+
+EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+def valid_email(email):
+	return not email or EMAIL_RE.match(email)
+
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		self.response.out.write("Hello, Udacity!")	
@@ -160,7 +101,57 @@ class Rot13(webapp2.RequestHandler):
 		output_un = escape_html(output)
 		self.response.out.write(formRot13 % {"content": output_un})
 
-app = webapp2.WSGIApplication([('/', MainPage),('/rot13',Rot13)],
+class BaseHandler(webapp2.RequestHandler):
+	def render(self, template, **kw):
+		self.response.out.write(render_str(template, **kw))
+
+class Signup(BaseHandler):
+	def get(self):
+		self.render('signup.html')
+	def post(self):
+		
+		username_received = self.request.get('username')
+		password_received = self.request.get('password') 
+		confirmation_received = self.request.get('verify')
+		email_received = self.request.get('email')
+
+		params = dict(username = username_received, email = email_received)
+
+		has_error = False
+	
+		if not valid_username(username_received):
+			params['error_username'] = "That's not a valid username." 
+			has_error = True
+
+		if not valid_password(password_received):
+			params['error_password'] = "That's not a valid password." 
+			has_error = True
+		elif password_received != confirmation_received:
+			params['error_verify'] = "Your passwords didn't match."
+			has_error = True
+
+		if not valid_email(email_received):
+			params['error_email'] = "That's not a valid email." 
+			has_error = True
+		
+		if has_error:
+			self.render('signup.html', **params)
+
+		else:
+			self.redirect('/welcome?username=' + username_received)
+
+class Welcome(BaseHandler):
+    def get(self):
+        username = self.request.get('username')
+        if valid_username(username):
+            self.render('welcome.html', username = username)
+        else:
+            self.redirect('/unit2/signup')
+
+app = webapp2.WSGIApplication([('/', MainPage),
+								('/rot13',Rot13), 
+								('/signup', Signup),
+								('/welcome', Welcome)],
 								debug=True)		
 
 
