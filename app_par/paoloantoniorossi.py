@@ -36,18 +36,6 @@ def rotate13(s):
 		result += a
 	return result
 
-#form="""
-#<form method="get"> 
-#	What is your birthday?
-#	<br>
-#	<input type="text" name="day">
-#	<input type="text" name="month">	
-#	<input type="text" name="year">
-#	<br>
-#	<br>
-#	<input type= "submit">
-#</form>"""
-
 formRot13="""
 
 <html>
