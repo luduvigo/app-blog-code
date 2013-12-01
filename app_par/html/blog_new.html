@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>luduvigo</title>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/static.css">
+	</head>
+
+	<body>
+		<h1>Luduvigo blog</h1>
+		<h2>New Post</h2>		
+
+		<form method="post">
+			<label>
+				<div>Subject</div>
+				<input type="text" name="subject" value="{{subject}}">
+			</label>
+			<label>
+				<div>Content</div>
+				<textarea name="content" cols="50" rows="10">{{content}}</textarea>
+			</label>
+
+			<div class="error">{{error}}</div>
+
+			<input type= "submit">
+
+		</form>
+
+		<hr>
+
+	<!--	{% for art in arts %}
+		<div class="art">
+			<div class="art-title">{{art.title}}</div>
+			<pre class="art-body">{{art.art}}</pre>
+		</div>
+		{% endfor %} 
+	</body> -->
+
+	</body>
+</html>

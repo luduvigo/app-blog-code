@@ -6,6 +6,8 @@ import HTMLParser
 import htmllib
 import os
 from string import letters
+from apps.rot13 import rot13
+from apps.blog import blog
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -22,39 +24,6 @@ def html_decode(s):
 	html_parser = HTMLParser.HTMLParser()
 	return html_parser.unescape(s)
 
-
-
-def rotate13(s):
-	result = ""
-	for a in s:
-		if re.match("[A-Z]", a):
-			att = (((ord(a) - 65) + 13)% 26) + 65
-			a = chr(att)
-		if re.match("[a-z]", a):
-			att = (((ord(a) - 97) + 13)% 26) + 97
-			a = chr(att)
-		result += a
-	return result
-
-formRot13="""
-
-<html>
-  <head>
-    <title>Unit 2 Rot 13</title>
-  </head>
-
-  <body>
-    <h2>Enter some text to ROT13:</h2>
-    <form method="post">
-      <textarea name="text"
-                style="height: 100px; width: 400px;">%(content)s</textarea>
-      <br>
-      <input type="submit">
-    </form>
-  </body>
-
-</html>
-"""
 def unescape(s):
     s = s.replace("&lt;", "<")
     s = s.replace("&gt;", ">")
@@ -77,17 +46,6 @@ def valid_email(email):
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		self.response.out.write("Hello, Udacity!")	
-
-class Rot13(webapp2.RequestHandler):
-	def get(self):
-		self.response.headers['Content-Type'] = 'text/html'
-		self.response.out.write(formRot13 % {"content": ""})
-	def post(self):
-		self.response.headers['Content-Type'] = 'text/html'
-		originalInput = self.request.get('text')
-		output = rotate13(originalInput)
-		output_un = escape_html(output)
-		self.response.out.write(formRot13 % {"content": output_un})
 
 class BaseHandler(webapp2.RequestHandler):
 	def render(self, template, **kw):
@@ -134,12 +92,15 @@ class Welcome(BaseHandler):
         if valid_username(username):
             self.render('welcome.html', username = username)
         else:
-            self.redirect('/unit2/signup')
+            self.redirect('/signup')
 
 app = webapp2.WSGIApplication([('/', MainPage),
-								('/rot13',Rot13), 
+								('/rot13', rot13.Rot13), 
 								('/signup', Signup),
-								('/welcome', Welcome)],
+								('/welcome', Welcome),
+								('/blog', blog.BlogHome),
+								(r'/blog/(\d+)', blog.PostHandler),
+								('/blog/newpost', blog.BlogNewPost)],
 								debug=True)		
 
 
