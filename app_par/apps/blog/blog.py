@@ -7,6 +7,7 @@ class Post(db.Model):
 	subject = db.StringProperty(required = True)
 	content = db.TextProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
+	last_modified = db.DateTimeProperty(auto_now = True)
 
 class BlogNewPost(handler.Handler):
 	def get(self):
@@ -28,7 +29,7 @@ class BlogNewPost(handler.Handler):
 class BlogHome(handler.Handler):
 	def get(self):
 		posts = db.GqlQuery("SELECT * FROM Post "
-						   "ORDER BY created DESC")
+						   "ORDER BY created DESC limit 10")
 		self.render("blog.html", posts = posts)
 		
 class PostHandler(handler.Handler):
@@ -37,4 +38,4 @@ class PostHandler(handler.Handler):
 		if blog_entry:
 			self.render("blog_post.html", post = blog_entry)
 		else:
-			self.render("boh")
+			self.error(404)
