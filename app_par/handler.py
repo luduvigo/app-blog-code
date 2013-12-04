@@ -16,3 +16,11 @@ class Handler(webapp2.RequestHandler):
 
 	def render(self, template, **kw):
 		self.write(self.render_str(template, **kw))
+
+class BaseHandler(webapp2.RequestHandler):
+	def render(self, template, **kw):
+		self.response.out.write(self.render_str(template, **kw))
+
+	def render_str(self, template, **params):
+	    t = jinja_env.get_template(template)
+	    return t.render(params)
