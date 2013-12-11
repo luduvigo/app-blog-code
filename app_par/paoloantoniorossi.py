@@ -35,7 +35,7 @@ class MainPage(webapp2.RequestHandler):
 
 class Welcome(handler.BaseHandler):
     def get(self):
-        username = self.request.get('username')
+        username = self.request.cookies.get('name')
         if utility.valid_username(username):
             self.render('welcome.html', username = username)
         else:
