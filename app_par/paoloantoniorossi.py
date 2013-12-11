@@ -10,6 +10,7 @@ from apps.rot13 import rot13
 from apps.blog import blog
 import handler
 import utility
+import security
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -36,8 +37,9 @@ class MainPage(webapp2.RequestHandler):
 class Welcome(handler.BaseHandler):
     def get(self):
         username = self.request.cookies.get('name')
-        if utility.valid_username(username):
-            self.render('welcome.html', username = username)
+        checked_username = security.check_secure_val(username)
+        if utility.valid_username(checked_username):
+            self.render('welcome.html', username = checked_username)
         else:
             self.redirect('/signup')
 

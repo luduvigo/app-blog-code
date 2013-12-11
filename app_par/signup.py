@@ -2,39 +2,15 @@ import webapp2
 import re
 import handler
 import utility
+import security
+from google.appengine.ext import db
 
-
-################################
-# Utilities
-
-SECRET = 'imsosecretppzz'
-def hash_str(s):
-    return hmac.new(SECRET, s).hexdigest()
-
-def make_secure_val(s):
-	return "%s|%s" % (s, hash_str(s))
-
-def check_secure_val(h):
-	val = h.split('|')[0]
-	if h == make_secure_val(val):
-		return val
-
-def make_salt():
-    return ''.join(random.choice(string.letters) for x in xrange(5))
-
-def make_pw_hash(name, pw, salt = None):
-    if not salt:
-        salt = make_salt()
-    h = hashlib.sha256(name + pw + salt).hexdigest()
-    return '%s,%s' % (h, salt)
-
-def valid_pw(name, pw, h):
-    punto = h.find(",")
-    salt = h[punto + 1:]
-    if h == make_pw_hash(name, pw, salt):
-        return True
-
-################################
+class User(db.Model):
+	username = db.StringProperty(required = True)
+	password = db.StringProperty(required = True)
+	email = db.StringProperty(required = False)
+	created = db.DateTimeProperty(auto_now_add = True)
+	last_modified = db.DateTimeProperty(auto_now = True)
 
 
 class Signup(handler.BaseHandler):
@@ -70,6 +46,10 @@ class Signup(handler.BaseHandler):
 			self.render('signup.html', **params)
 
 		else:
+			password = security.make_pw_hash(username_received, password_received)
+			u = User(username = username_received, password = password, email = email_received)
+			u.put()
 			self.response.headers['Content-Type'] = 'text/plain'
-			self.response.headers.add_header('Set-Cookie', 'name= %s' % username_received)
+			cookie_value = security.make_secure_val(str(username_received))
+			self.response.headers.add_header('Set-Cookie', 'name=' + cookie_value + '; Path=/')
 			self.redirect('/welcome')
