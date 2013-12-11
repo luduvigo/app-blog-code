@@ -21,21 +21,13 @@ def check_secure_val(h):
 def make_salt():
     return ''.join(random.choice(string.letters) for x in xrange(5))
 
-#def make_pw_hash(name, pw, salt = None):
-#    if not salt:
-#        salt = make_salt()
-#    h = hashlib.sha256(name + pw + salt).hexdigest()
-#    return '%s,%s' % (h, salt)
-
 def make_pw_hash(name, pw, salt=None):
     if salt is None:
         salt = make_salt()
-    return "%s,%s" % (salt, hashlib.sha256(name + pw + salt).hexdigest())
+    return "%s,%s" % (hashlib.sha256(name + pw + salt).hexdigest(),salt)
 
 def valid_pw(name, pw, h):
-    punto = h.find(",")
-    salt = h[punto + 1:]
-    if h == make_pw_hash(name, pw, salt):
-        return True
+    salt = h.split(',')[1]
+    return h == make_pw_hash(name, pw, salt)
 
 ################################
