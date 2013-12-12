@@ -88,4 +88,8 @@ class Login(handler.BaseHandler):
 		if has_error:
 			self.render('login.html', **params)
 
-		#self.render('login.html')
+class Logout(handler.BaseHandler):
+	def get(self):
+		self.response.headers['Content-Type'] = 'text/plain'
+		self.response.headers.add_header('Set-Cookie', 'name=''; Path=/')
+		self.redirect('/signup')
