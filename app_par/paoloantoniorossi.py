@@ -11,6 +11,7 @@ from apps.blog import blog
 import handler
 import utility
 import security
+import json
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -51,7 +52,9 @@ app = webapp2.WSGIApplication([('/', MainPage),
 								('/logout', signup.Logout),
 								('/blog', blog.BlogHome),
 								(r'/blog/(\d+)', blog.PostHandler),
-								('/blog/newpost', blog.BlogNewPost)],
+								('/blog/newpost', blog.BlogNewPost),
+								('/.json', json.MainJSON),
+								('r/(\d+)/.json', json.PermalinkJSON)],
 								debug=True)		
 
 
