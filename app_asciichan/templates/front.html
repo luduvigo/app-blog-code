@@ -9,6 +9,11 @@
     body {
         font-family: sans-serif; width: 800px; margin: 0 auto; padding: 10px;
     }
+	.map {
+		position : absolute;
+		right : 240px;
+		top: 125px;
+	}
     error {
         color: red;
     }
@@ -57,6 +62,10 @@
 			<input type= "submit">
 
 		</form>
+
+		{% if img_url %}
+			<img class="map" src="{{img_url}}">
+		{% endif %}
 
 		<hr>
 
