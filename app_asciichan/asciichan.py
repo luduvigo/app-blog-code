@@ -3,8 +3,11 @@ import webapp2
 import jinja2
 import urllib2
 from xml.dom import minidom
-
+import logging
 from google.appengine.ext import db
+from google.appengine.api import memcache
+
+DEBUG = os.environ['SERVER_SOFTWARE'].startswith('Development')
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -49,13 +52,22 @@ class Art(db.Model):
 	created = db.DateTimeProperty(auto_now_add = True)
 	coords = db.GeoPtProperty()
 
+def top_arts(update = False):
+	key = "top"
+	
+	arts = memcache.get(key)
+	if arts is None or update:
+		logging.error("DB QUERY")
+		arts = db.GqlQuery("SELECT * FROM Art "
+							"ORDER BY created DESC "
+							"LIMIT 10")
+		arts = list(arts)
+		memcache.set(key, arts)
+	return arts
+
 class MainPage(Handler):
 	def render_front(self, title="", art="", error=""):
-		arts = db.GqlQuery("SELECT * FROM Art "
-						   "ORDER BY created DESC")
-
-		#prevent the running of multiple queries
-		arts = list(arts)
+		arts = top_arts()		
 
 		points = filter(None, (a.coords for a in arts))
 		img_url = None
@@ -77,6 +89,7 @@ class MainPage(Handler):
 			if coords:
 				a.coords = coords			
 			a.put()
+			top_arts(True)
 			self.redirect("/")
 		else:
 			error = "we need both a title and some artwork!!!"
