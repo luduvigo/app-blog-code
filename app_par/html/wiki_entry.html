@@ -8,18 +8,17 @@
 	</head>
 
 	<body>
-		<h1>Luduvigo blog</h1>
+		<h1>Luduvigo wiki</h1>
 		<h2></h2>	
 		<div class="post">
 			<div class="post-title">
-				<a href=/blog/{{post.key().id()}} >{{post.subject}}</a>
+				<a href=/wiki/{{wiki.title}} >{{wiki.title}}</a>
 			</div>
-			 <div class="post-date">{{post.created.strftime("%d %b %Y")}}</div>
-			<pre class="post-content">{{post.content}}</pre>
+			 <div class="post-date">{{wiki.created.strftime("%d %b %Y")}}</div>
+			<pre class="post-content">{{wiki.content}}</pre>
 		</div>	
 
 
 		<hr>
-		<b>Queried {{modified}} seconds ago</b>
 	</body>
 </html>

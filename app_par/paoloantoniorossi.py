@@ -12,10 +12,13 @@ import utility
 import security
 from apps.blog import json_output
 from apps.blog import cache_utils
+from apps.wiki import wiki
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
+
+PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
@@ -41,7 +44,13 @@ app = webapp2.WSGIApplication([('/', MainPage),
 								('/blog/newpost', blog.BlogNewPost),
 								('/blog/.json', json_output.MainJSON),
 								(r'/blog/(\d+).json', json_output.PermalinkJSON),
-								('/blog/flush', cache_utils.FlushCache)],
+								('/blog/flush', cache_utils.FlushCache),
+								('/wiki/signup', signup.Signup),
+								('/wiki/login', signup.Login),
+								('/wiki/logout', signup.Logout),
+								('/wiki/_edit' + PAGE_RE, wiki.EditPage),
+								('/wiki' + PAGE_RE, wiki.WikiPage)
+								],
 								debug=True)		
 
 
