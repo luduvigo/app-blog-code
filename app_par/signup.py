@@ -59,7 +59,7 @@ class Signup(handler.BaseHandler):
 			self.response.headers['Content-Type'] = 'text/plain'
 			cookie_value = security.make_secure_val(str(username_received))
 			self.response.headers.add_header('Set-Cookie', 'name=' + cookie_value + '; Path=/')
-			self.redirect('/welcome')
+			self.redirect('/blog/welcome')
 
 class Login(handler.BaseHandler):
 	def get(self):
@@ -81,7 +81,7 @@ class Login(handler.BaseHandler):
 				self.response.headers['Content-Type'] = 'text/plain'
 				cookie_value = security.make_secure_val(str(username_rec))
 				self.response.headers.add_header('Set-Cookie', 'name=' + cookie_value + '; Path=/')
-				self.redirect('/welcome')
+				self.redirect('/blog/welcome')
 			else:
 				params['error_login'] = "Invalid input"
 				has_error = True
@@ -92,4 +92,4 @@ class Logout(handler.BaseHandler):
 	def get(self):
 		self.response.headers['Content-Type'] = 'text/plain'
 		self.response.headers.add_header('Set-Cookie', 'name=''; Path=/')
-		self.redirect('/signup')
+		self.redirect('/blog/signup')

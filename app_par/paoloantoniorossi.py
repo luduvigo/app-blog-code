@@ -1,6 +1,5 @@
 import webapp2
 import jinja2
-import cgi
 import HTMLParser
 import htmllib
 import os
@@ -12,24 +11,11 @@ import handler
 import utility
 import security
 from apps.blog import json_output
+from apps.blog import cache_utils
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
-
-def escape_html(s):
-    return cgi.escape(s, quote = True)
-
-def html_decode(s):
-	html_parser = HTMLParser.HTMLParser()
-	return html_parser.unescape(s)
-
-def unescape(s):
-    s = s.replace("&lt;", "<")
-    s = s.replace("&gt;", ">")
-    # this has to be last:
-    s = s.replace("&amp;", "&")
-    return s
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
@@ -46,15 +32,16 @@ class Welcome(handler.BaseHandler):
 
 app = webapp2.WSGIApplication([('/', MainPage),
 								('/rot13', rot13.Rot13), 
-								('/signup', signup.Signup),
-								('/welcome', Welcome),
-								('/login', signup.Login),
-								('/logout', signup.Logout),
+								('/blog/signup', signup.Signup),
+								('/blog/welcome', Welcome),
+								('/blog/login', signup.Login),
+								('/blog/logout', signup.Logout),
 								('/blog', blog.BlogHome),
 								(r'/blog/(\d+)', blog.PostHandler),
 								('/blog/newpost', blog.BlogNewPost),
 								('/blog/.json', json_output.MainJSON),
-								(r'/blog/(\d+).json', json_output.PermalinkJSON)],
+								(r'/blog/(\d+).json', json_output.PermalinkJSON),
+								('/blog/flush', cache_utils.FlushCache)],
 								debug=True)		
 
 

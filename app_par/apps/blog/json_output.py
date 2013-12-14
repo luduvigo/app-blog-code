@@ -13,10 +13,10 @@ class MainJSON(handler.BaseHandler):
 		list1 = []
 		for p in posts:
 
-			list1.append("{'subject' : '" + blog_entry.subject +"',"
-						" 'content' : '" + blog_entry.content + "',"
-						" 'created' : '" + blog_entry.created.strftime(time_fmt) + "',"
-						" 'last_modified' : '" + blog_entry.last_modified.strftime(time_fmt) + "'}")
+			list1.append("{'subject' : '" + p.subject +"',"
+						" 'content' : '" + p.content + "',"
+						" 'created' : '" + p.created.strftime(time_fmt) + "',"
+						" 'last_modified' : '" + p.last_modified.strftime(time_fmt) + "'}")
 
 		json1 = json.dumps(list1)
 		self.response.write(json1)

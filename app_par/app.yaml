@@ -8,9 +8,15 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets
 
+- url: /favicon\.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon\.ico
+
 - url: /.*
   script: paoloantoniorossi.app
 
 libraries:
 - name: jinja2
   version: latest
+
+

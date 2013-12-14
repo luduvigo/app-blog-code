@@ -1,4 +1,20 @@
 import webapp2
+import re
+import cgi
+
+def escape_html(s):
+    return cgi.escape(s, quote = True)
+
+def html_decode(s):
+	html_parser = HTMLParser.HTMLParser()
+	return html_parser.unescape(s)
+
+def unescape(s):
+    s = s.replace("&lt;", "<")
+    s = s.replace("&gt;", ">")
+    # this has to be last:
+    s = s.replace("&amp;", "&")
+    return s
 
 def rotate13(s):
 	result = ""

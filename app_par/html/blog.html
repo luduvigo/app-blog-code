@@ -16,7 +16,7 @@
 		{% for post in posts %}
 		<div class="post">
 			<div class="post-title">
-				<a href="/blog/"{{post.id}}>{{post.subject}}</a>
+				<a href= /blog/{{post.key().id()}} >{{post.subject}}</a>
 			</div>
 			 <div class="post-date">{{post.created}}</div>
 			<pre class="post-content">{{post.content}}</pre>
@@ -24,5 +24,7 @@
 
 		<hr>
 		{% endfor %} 
+
+		<b>Queried {{modified}} seconds ago</b>
 	</body>
 </html>
