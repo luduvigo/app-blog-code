@@ -53,8 +53,8 @@ app = webapp2.WSGIApplication([('/', MainPage),
 								('/blog', blog.BlogHome),
 								(r'/blog/(\d+)', blog.PostHandler),
 								('/blog/newpost', blog.BlogNewPost),
-								('/.json', json_output.MainJSON),
-								(r'/(\d+)/.json', json_output.PermalinkJSON)],
+								('/blog/.json', json_output.MainJSON),
+								(r'/blog/(\d+).json', json_output.PermalinkJSON)],
 								debug=True)		
 
 
