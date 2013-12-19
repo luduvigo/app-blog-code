@@ -22,7 +22,7 @@ PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
-		self.response.out.write("Hello, Udacity!")	
+		self.redirect('/blog')	
 
 class Welcome(handler.BaseHandler):
     def get(self):
