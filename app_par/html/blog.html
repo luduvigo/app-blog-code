@@ -4,22 +4,44 @@
 
 	<head>
 		<title>luduvigo</title>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/static.css">
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    		<link rel="stylesheet" href="https://d396qusza40orc.cloudfront.net/startup%2Fcode%2Fbootstrap-combined.no-icons.min.css">
+    		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
+    		<link rel="stylesheet" href="https://d396qusza40orc.cloudfront.net/startup%2Fcode%2Fsocial-buttons.css">    
+    		<script src="https://d396qusza40orc.cloudfront.net/startup%2Fcode%2Fjquery.js"></script>
+    		<script src="https://d396qusza40orc.cloudfront.net/startup%2Fcode%2Fbootstrap.js"></script>
+    		<link href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic" 
+          		rel="stylesheet" type="text/css">
+    		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,300,400,600,700,800" 
+          		rel="stylesheet" type="text/css">
+			<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 	</head>
 
 	<body>
-		<h1>Luduvigo blog</h1>
-		<h2>Latests Posts</h2>	
+
+		  <div class="container">
+    		<div class="row-fluid heading">
+      			<div class="span20">
+					<h1>Luduvigo blog</h1>
+				</div>  
+    		</div>
+    		<div class="row-fluid subheading">
+      			<div class="span12">
+        			<p class="lead">Latests Posts.</p>
+     		 	</div>
+    		</div>
 
 		<hr>
 
 		{% for post in posts %}
-		<div class="post">
-			<div class="post-title">
-				<a href= /blog/{{post.key().id()}} >{{post.subject}}</a>
+		<div class="row-fluid">
+			<div class="post">
+				<div class="post-title">
+					<a href= /blog/{{post.key().id()}} >{{post.subject}}</a>
+				</div>
+			 	<div class="post-date">{{post.created.strftime("%d %b %Y")}}</div>
+				<pre class="post-content">{{post.content}}</pre>
 			</div>
-			 <div class="post-date">{{post.created.strftime("%d %b %Y")}}</div>
-			<pre class="post-content">{{post.content}}</pre>
 		</div>
 
 		<hr>
@@ -29,6 +51,7 @@
 
 		<br>
 		<p></p>
+	</div>
 		<img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif"/>
 	</body>
 </html>
