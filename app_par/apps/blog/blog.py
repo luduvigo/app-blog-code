@@ -4,6 +4,8 @@ import logging
 import time
 from google.appengine.api import memcache
 from google.appengine.ext import db
+# import code for encoding urls and generating md5 hashes
+import urllib, hashlib
 
 class Post(db.Model):
 	subject = db.StringProperty(required = True)
@@ -61,9 +63,18 @@ class BlogNewPost(handler.Handler):
 
 class BlogHome(handler.Handler):
 	def get(self):
+
+		email = "paoloantoniorossi@gmail.com"
+		default = "http://www.example.com/default.jpg"
+		size = 150
+ 
+		# construct the url
+		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+		gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+
 		posts = newest_posts()
 		modified = time_since_queried("queried")
-		self.render("blog.html", posts = posts, modified = modified)
+		self.render("blog.html", posts = posts, modified = modified, gravatar = gravatar_url)
 		
 class PostHandler(handler.Handler):
 	def get(self, post_id):

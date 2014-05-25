@@ -13,6 +13,8 @@ import security
 from apps.blog import json_output
 from apps.blog import cache_utils
 from apps.wiki import wiki
+# import code for encoding urls and generating md5 hashes
+import urllib, hashlib
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -20,9 +22,18 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
-class MainPage(webapp2.RequestHandler):
+
+class MainPage(handler.BaseHandler):
 	def get(self):
-		self.redirect('/blog')	
+		# Set your variables here
+		email = "paoloantoniorossi@gmail.com"
+		default = "http://www.example.com/default.jpg"
+		size = 150
+ 
+		# construct the url
+		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+		gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+		self.render('home.html', gravatar = gravatar_url)	
 
 class Welcome(handler.BaseHandler):
     def get(self):
@@ -33,7 +44,7 @@ class Welcome(handler.BaseHandler):
         else:
             self.redirect('/signup')
 
-app = webapp2.WSGIApplication([('/', MainPage),
+app = webapp2.WSGIApplication([('/', blog.BlogHome),
 								('/rot13', rot13.Rot13), 
 								('/signup', signup.Signup),
 								('/welcome', Welcome),
