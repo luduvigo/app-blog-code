@@ -41,7 +41,16 @@ def time_since_queried(key_queried):
 	time_queried = memcache.get(key_queried)
 	time_passed = time.time() - time_queried
 	return int(time_passed)
-	
+
+
+def gravatar():
+	email = "paoloantoniorossi@gmail.com"
+	default = "http://www.example.com/default.jpg"
+	size = 150
+	# construct the url
+	gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+	gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+	return gravatar_url
 
 class BlogNewPost(handler.Handler):
 	def get(self):
@@ -63,24 +72,17 @@ class BlogNewPost(handler.Handler):
 
 class BlogHome(handler.Handler):
 	def get(self):
-
-		email = "paoloantoniorossi@gmail.com"
-		default = "http://www.example.com/default.jpg"
-		size = 150
- 
-		# construct the url
-		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-		gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-
 		posts = newest_posts()
 		modified = time_since_queried("queried")
+		gravatar_url = gravatar()
 		self.render("blog.html", posts = posts, modified = modified, gravatar = gravatar_url)
 		
 class PostHandler(handler.Handler):
 	def get(self, post_id):
 		blog_entry = memcache_post(post_id)
 		modified = time_since_queried("queried_post_" + post_id)
+		gravatar_url = gravatar()
 		if blog_entry:
-			self.render("blog_post.html", post = blog_entry, modified = modified)
+			self.render("blog_post.html", post = blog_entry, modified = modified, gravatar = gravatar_url)
 		else:
 			self.error(404)
