@@ -22,19 +22,6 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
-
-class MainPage(handler.BaseHandler):
-	def get(self):
-		# Set your variables here
-		email = "paoloantoniorossi@gmail.com"
-		default = "http://www.example.com/default.jpg"
-		size = 150
- 
-		# construct the url
-		gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-		gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-		self.render('home.html', gravatar = gravatar_url)	
-
 class Welcome(handler.BaseHandler):
     def get(self):
         username = self.request.cookies.get('name')
