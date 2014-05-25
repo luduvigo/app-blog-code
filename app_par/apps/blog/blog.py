@@ -59,6 +59,7 @@ class BlogNewPost(handler.Handler):
 	def post(self):
 		subject = self.request.get("subject")
 		content = self.request.get("content")
+		content = escape_html(content)
 	
 		if subject and content:
 			p = Post(subject = subject, content = content)

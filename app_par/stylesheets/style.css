@@ -63,7 +63,7 @@
         background-color: #343434;
         padding: 3% 0%;
       }
-      .video, .thermometer, .order, .social, .statistics {
+      .video, .thermometer, .order, .statistics {
         text-align: center;
       }
       .statistics h3, .statistics p {
@@ -94,4 +94,10 @@
           font-family: 'Lobster', Helvetica, Arial, sans-serif;
           font-size: 20px;
         }        
-      
+      button {
+        width: 120px;
+      }
+
+      form {
+        padding: 0px;
+      }
