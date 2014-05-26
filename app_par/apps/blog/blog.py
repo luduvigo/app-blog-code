@@ -2,10 +2,12 @@ import webapp2
 import handler
 import logging
 import time
+import cgi
 from google.appengine.api import memcache
 from google.appengine.ext import db
 # import code for encoding urls and generating md5 hashes
 import urllib, hashlib
+import security
 
 class Post(db.Model):
 	subject = db.StringProperty(required = True)
@@ -42,6 +44,8 @@ def time_since_queried(key_queried):
 	time_passed = time.time() - time_queried
 	return int(time_passed)
 
+def escape_html(s):
+    return cgi.escape(s, quote = True)
 
 def gravatar():
 	email = "paoloantoniorossi@gmail.com"
@@ -54,12 +58,17 @@ def gravatar():
 
 class BlogNewPost(handler.Handler):
 	def get(self):
-		self.render("blog_new.html")
+		username_cookie = self.request.cookies.get('name')
+		user = security.check_secure_val(username_cookie)
+		if user == None:
+			self.redirect('/')
+		else:
+			self.render("blog_new.html", username = user)
 
 	def post(self):
 		subject = self.request.get("subject")
 		content = self.request.get("content")
-		content = escape_html(content)
+		#content = escape_html(content)
 	
 		if subject and content:
 			p = Post(subject = subject, content = content)

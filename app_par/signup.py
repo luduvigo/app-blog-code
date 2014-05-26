@@ -19,6 +19,9 @@ class Signup(handler.BaseHandler):
 	def post(self):
 		
 		username_received = self.request.get('username')
+		if (username_received != "luduvigo"):
+			self.redirect('/')
+			return
 		password_received = self.request.get('password') 
 		confirmation_received = self.request.get('verify')
 		email_received = self.request.get('email')
@@ -59,7 +62,7 @@ class Signup(handler.BaseHandler):
 			self.response.headers['Content-Type'] = 'text/plain'
 			cookie_value = security.make_secure_val(str(username_received))
 			self.response.headers.add_header('Set-Cookie', 'name=' + cookie_value + '; Path=/')
-			self.redirect('/blog/welcome')
+			self.redirect('/welcome')
 
 class Login(handler.BaseHandler):
 	def get(self):
@@ -81,7 +84,7 @@ class Login(handler.BaseHandler):
 				self.response.headers['Content-Type'] = 'text/plain'
 				cookie_value = security.make_secure_val(str(username_rec))
 				self.response.headers.add_header('Set-Cookie', 'name=' + cookie_value + '; Path=/')
-				self.redirect('/blog/welcome')
+				self.redirect('/welcome')
 			else:
 				params['error_login'] = "Invalid input"
 				has_error = True
