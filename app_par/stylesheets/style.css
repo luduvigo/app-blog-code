@@ -55,6 +55,31 @@
         padding: 0;
       }
 
+      .post-title {
+        font-size: 24px;
+        text-decoration: none;
+        color: #333;
+      }
+
+      .post-title:visited {
+        color: #333;
+      }
+
+      .post-date {
+        position: relative;
+        right: 0px;
+        top: 0px;
+
+      }
+
+      .post-content {
+        margin-top: 15px;
+      }
+      .post-content a {
+          font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+          font-size: 15px;
+      }
+
       /* Video pitch and Action*/
       .pitch {
         padding: 2.5% 0%;
