@@ -13,6 +13,10 @@ class Wiki(db.Model):
 
 class EditPage(handler.Handler):
 	def get(self, page_name):
+		logging.error("DB QUERY")
+		logging.error(page_name)
+		wiki = db.GqlQuery("SELECT * FROM Wiki "
+						   "WHERE title = '%s'" %page_name[1:]).get()
 		self.render("wiki_edit.html", page_name = page_name[1:])
 
 	def post(self, page_name):
