@@ -1,10 +1,12 @@
 {% extends "home.html" %}
 
 		{% block content %}
-		<h2>Luduvigo wiki</h2>
+		<div class="subheading_l">
+			<h3>Wiki pages</h3>
+		</div>
 		<div class="post">
 			<div class="post-title">
-				<a href=/wiki/{{wiki.title}} >{{wiki.title}}</a>
+				<h4>{{wiki.title}}</h4>
 			</div>
 			 <div class="post-date">{{wiki.created.strftime("%d %b %Y")}}</div>
 			<pre class="post-content">{{wiki.content}}</pre>

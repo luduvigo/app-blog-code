@@ -47,7 +47,8 @@ app = webapp2.WSGIApplication([('/', blog.BlogHome),
 								('/wiki/login', signup.Login),
 								('/wiki/logout', signup.Logout),
 								('/wiki/_edit' + PAGE_RE, wiki.EditPage),
-								('/wiki' + PAGE_RE, wiki.WikiPage)
+								('/wiki' + PAGE_RE, wiki.WikiPage),
+								('/wiki_index', wiki.WikiIndex)
 								],
 								debug=True)		
 

@@ -3,13 +3,13 @@ import handler
 import logging
 from google.appengine.api import memcache
 from google.appengine.ext import db
+from apps.blog import blog
 
 class Wiki(db.Model):
 	title = db.StringProperty(required = True)
 	content = db.TextProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	last_modified = db.DateTimeProperty(auto_now = True)
-
 
 class EditPage(handler.Handler):
 	def get(self, page_name):
@@ -35,9 +35,15 @@ class WikiPage(handler.Handler):
 	def get(self, page_name):
 		logging.error("DB QUERY")
 		logging.error(page_name)
+		gravatar_url = blog.gravatar()
 		wiki = db.GqlQuery("SELECT * FROM Wiki "
 						   "WHERE title = '%s'" %page_name[1:]).get()
 		if wiki is None:
-			self.redirect("/wiki/_edit%s" %page_name)
+			self.redirect("/wiki/_edit%s" %page_name, gravatar = gravatar_url)
 		else:	
-			self.render("wiki_entry.html", wiki = wiki)
+			self.render("wiki_entry.html", wiki = wiki, gravatar = gravatar_url)
+
+class WikiIndex(handler.Handler):
+	def get(self):
+		gravatar_url = blog.gravatar()
+		self.render("wiki_home.html", gravatar = gravatar_url)

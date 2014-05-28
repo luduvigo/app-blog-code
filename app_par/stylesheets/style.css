@@ -38,9 +38,16 @@
         font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
         text-align: center;
       }
+      .subheading_l {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
       .heading {
         padding-top:  25px;
         padding-bottom: 10px;
+      }
+      .small {
+        font-size: 12px;
+        padding-bottom: 10px; 
       }
       p.lead {
         padding-top: 1.5%;
