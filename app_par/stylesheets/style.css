@@ -125,6 +125,14 @@
         color: #fe9a2e;
       }
 
+      .blog-input-form textarea{
+        width: 80%;
+      }
+
+      .subject-input input{
+        width: 80%;
+      }
+
       a {
           font-family: 'Lobster', Helvetica, Arial, sans-serif;
           font-size: 20px;

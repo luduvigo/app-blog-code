@@ -1,24 +1,24 @@
 {% extends "home.html" %}
 
 		{% block content %}
-		<h1>Luduvigo blog</h1>
-		<h2>New Post</h2>
+		<h3>New Post</h3>
 
-		<p>{{username}}</p>		
+		<!-- <p>{{username}}</p> -->		
 
+		<div class="blog-input-form">
 		<form method="post">
 			<label>
-				<div>Subject</div>
-				<input type="text" name="subject" value="{{subject}}">
+				<p>Subject</p>
+				<div class="subject-input">
+					<input type="text" name="subject" value="{{subject}}">
+				</div>
 			</label>
 			<label>
-				<div>Content</div>
-				<textarea name="content" cols="50" rows="10">{{content}}</textarea>
+				<p>Content</p>
+				<textarea name="content" rows="12">{{content}}</textarea>
 			</label>
-
 			<div class="error">{{error}}</div>
-
 			<input type= "submit">
-
+		</div>
 		</form>
 		{% endblock %}

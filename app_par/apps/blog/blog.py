@@ -23,7 +23,6 @@ def newest_posts(update = False):
 		logging.error("DB QUERY")
 		posts = db.GqlQuery("SELECT * FROM Post "
 						   "ORDER BY created DESC limit 10")
-		posts = list(posts)
 		memcache.set(key, posts)
 		memcache.set("queried", time.time())
 	return posts
@@ -58,12 +57,13 @@ def gravatar():
 
 class BlogNewPost(handler.Handler):
 	def get(self):
+		gravatar_url = gravatar()
 		username_cookie = self.request.cookies.get('name')
 		user = security.check_secure_val(username_cookie)
 		if user == None:
 			self.redirect('/')
 		else:
-			self.render("blog_new.html", username = user)
+			self.render("blog_new.html", username = user, gravatar = gravatar_url)
 
 	def post(self):
 		subject = self.request.get("subject")
@@ -83,6 +83,8 @@ class BlogNewPost(handler.Handler):
 class BlogHome(handler.Handler):
 	def get(self):
 		posts = newest_posts()
+		for post in posts:
+			logging.error("UN POST")
 		modified = time_since_queried("queried")
 		gravatar_url = gravatar()
 		self.render("blog.html", posts = posts, modified = modified, gravatar = gravatar_url)
