@@ -1,9 +1,11 @@
 app-blog-code
 =============
 
-Simple google appengine implementation of a blog
+Simple google appengine implementation of a blog.
 
-developed by luduvigo
+Developed by **luduvigo**
 
-to start in local the web application run:
+## Start in local
+
+To start in local the web application run:
 app-blog-code/dev_appserver.py app-blog-code/app_par/ --port=$PORT_NUMBER
