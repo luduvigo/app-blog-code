@@ -64,24 +64,29 @@
       }
 
       .post-title {
-        font-size: 24px;
+        font-size: 24x;
         text-decoration: none;
         color: #333;
+				text-align: center;
       }
+
+			.post-title a {
+				font-size: 30px;
+			}
 
       .post-title:visited {
         color: #333;
       }
 
       .post-date {
-        position: relative;
-        right: 0px;
-        top: 0px;
-
+				text-align: center;
+				font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+				font-size: 14px;
       }
 
       .post-content {
         margin-top: 15px;
+				margin-left: 15px;
 				font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
 				font-size: 15px;
       }
@@ -89,6 +94,10 @@
           font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
           font-size: 15px;
       }
+			.post-content ul {
+					list-style: round outside none;
+					line-height: 0.5em;
+			}
 
       /* Video pitch and Action*/
       .pitch {
