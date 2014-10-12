@@ -82,6 +82,8 @@
 
       .post-content {
         margin-top: 15px;
+				font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+				font-size: 15px;
       }
       .post-content a {
           font-family: 'Ubuntu', Helvetica, Arial, sans-serif;

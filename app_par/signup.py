@@ -3,6 +3,7 @@ import re
 import handler
 import utility
 import security
+import logging
 from google.appengine.ext import db
 
 class User(db.Model):
@@ -17,7 +18,6 @@ class Signup(handler.BaseHandler):
 	def get(self):
 		self.render('signup.html')
 	def post(self):
-		
 		username_received = self.request.get('username')
 		if (username_received != "luduvigo"):
 			self.redirect('/')
@@ -32,7 +32,6 @@ class Signup(handler.BaseHandler):
 		params = dict(username = username_received, email = email_received)
 
 		has_error = False
-
 		if check_user:
 			params['error_username'] = "The username already exists." 
 			has_error = True
